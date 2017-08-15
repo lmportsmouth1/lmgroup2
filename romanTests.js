@@ -11,6 +11,12 @@ describe("Roman Numeral Tests", function () {
         done();
     });
     
+      it("checkInput2", function(done) { 
+        getRoman("II",2);
+        done();
+    });
+    
+    
       function getRoman(expected, input) {
         var instanceRoman = new Roman();
         var result = instanceRoman.convertToRoman(input);
