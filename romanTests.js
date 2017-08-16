@@ -2,22 +2,37 @@
 
 var assert = require('assert'); 
 var Roman = require('./roman.js');
+var Logger = require('./logger');
+var sinon = require('sinon');
+
 
 describe("Roman Numeral Tests", function () {
     
+    var logger;
     
-    it("checkInput1", function(done) { 
+    beforeEach(function (done) {
+       logger = new Logger();
+       done(); 
+    });
+    
+    it("checkInput1-fake", function(done) { 
+        logger.Write = function() {};
         getRoman("I",1);
         done();
     });
     
-      it("checkInput2", function(done) { 
-        assert(true, "test2");
+      it("checkInput2-dummy", function(done) { 
+			logger.Write = function() 
+			{
+                console.log("dummy");
+			};
         getRoman("II",2);
         done();
     });
     
-    it("checkInput3", function(done) { 
+    it("checkInput3-stub", function(done) { 
+			var stubWrite = sinon.stub(logger, 'Write');
+			stubWrite.returns(console.log("stub"));
         getRoman("III",3);
         done();
     });
@@ -86,7 +101,7 @@ describe("Roman Numeral Tests", function () {
         done();
     });  
       function getRoman(expected, input) {
-        var instanceRoman = new Roman();
+        var instanceRoman = new Roman(logger);
         var result = instanceRoman.convertToRoman(input);
         assert(expected === result, "Input: " + input + " Failed, result was " + result);
     }
